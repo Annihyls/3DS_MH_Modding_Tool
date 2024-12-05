@@ -84,14 +84,14 @@ def ToColorFormat(A, R, G, B, OutputFormat):
     result = 0
     if (OutputFormat.ASize != 0):
         mask = ~(0xFFFFFFFF << OutputFormat.ASize) & 0xFFFFFFFF
-        result |= ((A * mask + 127) / 255) << OutputFormat.AShift
+        result |= ((A * mask + 127) // 255) << OutputFormat.AShift
 
     mask = ~(0xFFFFFFFF << OutputFormat.RSize) & 0xFFFFFFFF
-    result |= ((R * mask + 127) / 255) << OutputFormat.RShift
+    result |= ((R * mask + 127) // 255) << OutputFormat.RShift
     mask = ~(0xFFFFFFFF << OutputFormat.GSize) & 0xFFFFFFFF
-    result |= ((G * mask + 127) / 255) << OutputFormat.GShift
+    result |= ((G * mask + 127) // 255) << OutputFormat.GShift
     mask = ~(0xFFFFFFFF << OutputFormat.BSize) & 0xFFFFFFFF
-    result |= ((B * mask + 127) / 255) << OutputFormat.BShift
+    result |= ((B * mask + 127) // 255) << OutputFormat.BShift
 
     return result & 0xFFFFFFFF
 
@@ -278,21 +278,21 @@ def SetTable2(Data, Table):
 
 
 def SetBaseColors(Data, Color1, Color2):
-    R1 = Color1.R
-    G1 = Color1.G
-    B1 = Color1.B
-    R2 = Color2.R
-    G2 = Color2.G
-    B2 = Color2.B
+    R1 = int(Color1.R)
+    G1 = int(Color1.G)
+    B1 = int(Color1.B)
+    R2 = int(Color2.R)
+    G2 = int(Color2.G)
+    B2 = int(Color2.B)
     # First look if differencial is possible.
-    RDiff = (R2 - R1) / 8
-    GDiff = (G2 - G1) / 8
-    BDiff = (B2 - B1) / 8
+    RDiff = int((R2 - R1) / 8)
+    GDiff = int((G2 - G1) / 8)
+    BDiff = int((B2 - B1) / 8)
     if (RDiff > -4 and RDiff < 3 and GDiff > -4 and GDiff < 3 and BDiff > -4 and BDiff < 3):
         Data = SetDiffMode(Data, True)
-        R1 /= 8
-        G1 /= 8
-        B1 /= 8
+        R1 = int(R1 / 8)
+        G1 = int(G1 / 8)
+        B1 = int(B1 / 8)
         Data |= R1 << 59
         Data |= G1 << 51
         Data |= B1 << 43
@@ -300,13 +300,13 @@ def SetBaseColors(Data, Color1, Color2):
         Data |= (GDiff & 0x7) << 48
         Data |= (BDiff & 0x7) << 40
     else:
-        Data |= (R1 / 0x11) << 60
-        Data |= (G1 / 0x11) << 52
-        Data |= (B1 / 0x11) << 44
+        Data |= (R1 // 0x11) << 60
+        Data |= (G1 // 0x11) << 52
+        Data |= (B1 // 0x11) << 44
 
-        Data |= (R2 / 0x11) << 56
-        Data |= (G2 / 0x11) << 48
-        Data |= (B2 / 0x11) << 40
+        Data |= (R2 // 0x11) << 56
+        Data |= (G2 // 0x11) << 48
+        Data |= (B2 // 0x11) << 40
     return Data
 
 
@@ -451,4 +451,4 @@ def decode_etc1(data, width, height, alpha=False):
 
             rgba[x + y * width] = packpixel(c)
         block_index += 1
-    return rgba.tostring()
+    return rgba.tobytes()

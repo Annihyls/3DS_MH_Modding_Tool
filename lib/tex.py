@@ -20,7 +20,7 @@ from .texutil import *
 
 
 class TEX:
-    magic = ['TEX\x00', 'TEX ', ' XET', '\x00XET']
+    magic = [b'TEX\x00', b'TEX ', b' XET', b'\x00XET']
     formats = {
         1: 'rgba4444',
         3: 'rgba8888',
@@ -41,7 +41,7 @@ class TEX:
             self.import_tex(tex)
 
     def import_tex(self, tex):
-        if read_block(tex, 0x0, 0x4) in [' XET', '\x00XET']:
+        if read_block(tex, 0x0, 0x4) in [b' XET', b'\x00XET']:
             tex = byteswap(tex[:0x10]) + tex[0x10:]
         self._meta  = bytearray(read_block(tex, 0x0, 0x10))
         self.parse_meta(self._meta)

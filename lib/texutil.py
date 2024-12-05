@@ -483,7 +483,7 @@ def encode_etc1(image, alpha=False):
         for i in range(8):
             raw[block_idx * BYTES + i + BYTES - 8] = block_data >> (i * 8) & 0xFF
 
-    return raw.tostring()
+    return raw.tobytes()
 
 
 def encode_rgb888(image, alpha=False):

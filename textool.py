@@ -72,7 +72,7 @@ def create(filename, mipmaps, texformat=None):
         for mipmap_level in range(1, tex.mipmap_count):
             width = image.width // (2**mipmap_level)
             height = image.height // (2**mipmap_level)
-            mipmap = image.resize((width, height), resample=Image.ANTIALIAS)
+            mipmap = image.resize((width, height), resample=Image.Resampling.LANCZOS)
             tex.add_mipmap(mipmap)
 
     writeFile(filename, tex.export_tex())
